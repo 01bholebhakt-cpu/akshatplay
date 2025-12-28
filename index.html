@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AkshatPlay – Watch & Upload Videos</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --text-color: #ffffff;
+            --secondary-color: #272727;
+            --hover-color: #3f3f3f;
+            --brand-color: #ff3d00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            background-color: var(--bg-color);
+            z-index: 1000;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo i {
+            color: var(--brand-color);
+            margin-right: 6px;
+        }
+
+        .mid-section {
+            display: flex;
+            align-items: center;
+            flex: 0 1 600px;
+        }
+
+        .search-box {
+            flex: 1;
+            height: 40px;
+            background-color: #121212;
+            border: 1px solid var(--secondary-color);
+            border-radius: 40px 0 0 40px;
+            padding: 0 16px;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 15px;
+        }
+
+        .search-btn {
+            width: 64px;
+            height: 40px;
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 0 40px 40px 0;
+            cursor: pointer;
+            color: white;
+        }
+
+        .mic-btn {
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--secondary-color);
+            color: white;
+            cursor: pointer;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 20px;
+        }
+
+        .profile {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--brand-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 240px;
+            height: calc(100vh - 56px);
+            padding: 12px;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .nav-item i {
+            margin-right: 20px;
+            font-size: 18px;
+            width: 24px;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--secondary-color);
+            margin: 12px 0;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-top: 56px;
+            margin-left: 240px;
+            padding: 20px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            position: sticky;
+            top: 56px;
+            background-color: var(--bg-color);
+            z-index: 100;
+        }
+
+        .categories::-webkit-scrollbar { display: none; }
+
+        .chip {
+            background-color: var(--secondary-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .chip.active {
+            background-color: white;
+            color: black;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .video-card { cursor: pointer; }
+
+        .thumbnail {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: #333;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .duration {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            font-size: 12px;
+            padding: 2px 4px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 4px;
+        }
+
+        .video-info {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .channel-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #555;
+        }
+
+        .details h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .details p {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid var(--secondary-color);
+            color: #888;
+        }
+
+        @media (max-width: 1000px) {
+            .sidebar { width: 72px; }
+            .sidebar span, hr { display: none; }
+            .main-content { margin-left: 72px; }
+        }
+
+        @media (max-width: 600px) {
+            .mid-section, .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="left-section">
+        <i class="fa-solid fa-bars"></i>
+        <a href="#" class="logo"><i class="fa-solid fa-play"></i>AkshatPlay</a>
+    </div>
+
+    <div class="mid-section">
+        <div class="search-box"><input type="text" placeholder="Search videos"></div>
+        <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+    </div>
+
+    <div class="right-section">
+        <i class="fa-solid fa-video"></i>
+        <i class="fa-solid fa-bell"></i>
+        <div class="profile">A</div>
+    </div>
+</header>
+
+<div class="sidebar">
+    <a class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a class="nav-item"><i class="fa-solid fa-bolt"></i><span>Shorts</span></a>
+    <a class="nav-item"><i class="fa-solid fa-clapperboard"></i><span>Subscriptions</span></a>
+    <hr>
+    <a class="nav-item"><i class="fa-solid fa-clock"></i><span>Watch Later</span></a>
+</div>
+
+<main class="main-content">
+    <div class="categories">
+        <div class="chip active">All</div>
+        <div class="chip">Music</div>
+        <div class="chip">Gaming</div>
+        <div class="chip">Live</div>
+        <div class="chip">Coding</div>
+        <div class="chip">Cricket</div>
+        <div class="chip">Akshat</div>
+    </div>
+
+    <div class="video-grid" id="videoGrid"></div>
+
+    <footer>
+        <p>© 2025 AkshatPlay</p>
+        <strong>founder – akshat sinha</strong>
+    </footer>
+</main>
+
+<script>
+    const videos = Array.from({ length: 12 }, (_, i) => ({
+        title: `Sample Video ${i + 1}`,
+        channel: 'AkshatPlay Originals',
+        views: `${Math.floor(Math.random()*900+100)}K views`,
+        time: '1 day ago',
+        duration: '10:00',
+        thumb: `https://picsum.photos/seed/${i}/400/225`
+    }));
+
+    const grid = document.getElementById('videoGrid');
+
+    videos.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+            <div class="thumbnail">
+                <img src="${v.thumb}">
+                <span class="duration">${v.duration}</span>
+            </div>
+            <div class="video-info">
+                <div class="channel-icon"></div>
+                <div class="details">
+                    <h3>${v.title}</h3>
+                    <p>${v.channel}</p>
+                    <p>${v.views} • ${v.time}</p>
+                </div>
+            </div>`;
+        grid.appendChild(card);
+    });
+
+    document.querySelectorAll('.chip').forEach(c => {
+        c.onclick = () => {
+            document.querySelector('.chip.active')?.classList.remove('active');
+            c.classList.add('active');
+        }
+    });
+</script>
+
+</body>
+</html>
